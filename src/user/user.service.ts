@@ -16,6 +16,10 @@ export class UserService {
     };
     const createdUser = await this.prisma.user.create({ data });
 
+    if (data == null) {
+      throw new Error('data não pode ser nulo');
+    }
+
     return {
       ...createdUser,
       password: undefined,
@@ -24,14 +28,15 @@ export class UserService {
 
   async findByEmail(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      throw new Error('Email não encontrado');
+    }
+
     return {
       ...user,
       password: undefined,
     };
-  }
-
-  findAll() {
-    return `This action returns all user`;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
