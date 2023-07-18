@@ -22,16 +22,16 @@ export class UserService {
     };
   }
 
-  findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
+  async findByEmail(email: string) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    return {
+      ...user,
+      password: undefined,
+    };
   }
 
   findAll() {
     return `This action returns all user`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
